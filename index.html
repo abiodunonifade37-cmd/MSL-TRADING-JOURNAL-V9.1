@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
+<meta name="description" content="MSL Trading Journal — professional cloud trading journal">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg">
+<link rel="stylesheet" href="styles.css">
+<title>MSL Trading Journal</title>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<div id="authView" class="auth-shell">
+  <div class="auth-card">
+    <div class="brand-mark">MSL</div>
+    <p class="eyebrow">TRADING OPERATING SYSTEM</p>
+    <h1>MSL Trading Journal</h1>
+    <p class="muted">Track execution. Refine your model. Measure what actually works.</p>
+    <div class="auth-tabs">
+      <button class="tab active" data-auth-tab="login">Sign in</button>
+      <button class="tab" data-auth-tab="signup">Create account</button>
+    </div>
+    <form id="authForm">
+      <label>Email<input id="authEmail" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+      <label>Password<input id="authPassword" type="password" required minlength="6" autocomplete="current-password" placeholder="Minimum 6 characters"></label>
+      <button class="primary full" id="authSubmit">Sign in</button>
+    </form>
+    <button class="link-btn" id="resetPassword">Forgot password?</button>
+    <div class="demo-divider"><span>or</span></div>
+    <button class="ghost full" id="demoBtn">Continue in Demo Mode</button>
+    <p class="tiny">Cloud mode uses Supabase email/password authentication. No Google or phone login is required.</p>
+  </div>
+</div>
+
+<div id="appView" class="app hidden">
+  <aside class="sidebar">
+    <div class="side-brand"><span class="brand-mark small">MSL</span><div><b>MSL</b><small>TRADING JOURNAL</small></div></div>
+    <nav>
+      <button class="nav-item active" data-page="dashboard">⌂ <span>Dashboard</span></button>
+      <button class="nav-item" data-page="journal">▤ <span>Trade Journal</span></button>
+      <button class="nav-item" data-page="models">◇ <span>My Models</span></button>
+      <button class="nav-item" data-page="analytics">◒ <span>Analytics</span></button>
+      <button class="nav-item" data-page="playbook">☰ <span>Playbook</span></button>
+      <button class="nav-item" data-page="settings">⚙ <span>Settings</span></button>
+    </nav>
+    <div class="side-bottom">
+      <div id="cloudStatus" class="status-pill">● Demo mode</div>
+      <button class="ghost full" id="logoutBtn">Log out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><p class="eyebrow" id="pageEyebrow">OVERVIEW</p><h2 id="pageTitle">Dashboard</h2></div>
+      <div class="top-actions">
+        <button class="icon-btn" id="syncBtn" title="Sync">↻</button>
+        <button class="primary" id="quickTrade">+ Log trade</button>
+      </div>
+    </header>
+
+    <section id="page-dashboard" class="page active">
+      <div class="hero">
+        <div><span class="eyebrow">EXECUTION COMMAND CENTER</span><h1>Trade the plan. Review the data.</h1><p class="muted">Your journal should tell you exactly where your edge is leaking.</p></div>
+        <div class="hero-chip"><span id="heroNetR">0.00R</span><small>NET R</small></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat"><span>Win rate</span><strong id="statWin">0%</strong><small id="statWins">0W / 0L</small></div>
+        <div class="stat"><span>Expectancy</span><strong id="statExp">0.00R</strong><small>per trade</small></div>
+        <div class="stat"><span>Profit factor</span><strong id="statPF">0.00</strong><small>gross wins / losses</small></div>
+        <div class="stat"><span>Trades</span><strong id="statTrades">0</strong><small id="statMonth">all time</small></div>
+      </div>
+      <div class="two-col">
+        <div class="panel"><div class="panel-head"><div><span class="eyebrow">RECENT EXECUTIONS</span><h3>Latest trades</h3></div><button class="link-btn" data-go="journal">View all</button></div><div id="recentTrades" class="trade-list empty">No trades yet.</div></div>
+        <div class="panel"><div class="panel-head"><div><span class="eyebrow">DISCIPLINE</span><h3>Model adherence</h3></div></div><div id="adherenceBox" class="adherence"><div class="ring"><span id="adherencePct">0%</span></div><div><b id="adherenceLabel">No data</b><p class="muted">Complete the execution checklist on every trade.</p></div></div><div class="mini-bars" id="checkBars"></div></div>
+      </div>
+    </section>
+
+    <section id="page-journal" class="page">
+      <div class="toolbar"><div class="search"><span>⌕</span><input id="tradeSearch" placeholder="Search pair, setup, liquidity, notes..."></div><select id="resultFilter"><option value="">All results</option><option>Win</option><option>Loss</option><option>BE</option></select><select id="setupFilter"><option value="">All setups</option><option>Reversal</option><option>Continuation</option></select><button class="primary" id="newTradeBtn">+ New trade</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Date</th><th>Pair</th><th>Direction</th><th>Setup</th><th>Liquidity</th><th>Model</th><th>Result</th><th>R</th><th></th></tr></thead><tbody id="tradeTable"></tbody></table></div>
+    </section>
+
+    <section id="page-models" class="page">
+      <div class="section-head"><div><span class="eyebrow">EDGE DEVELOPMENT</span><h2>My Trading Models</h2><p class="muted">Version your rules instead of letting your strategy drift.</p></div><button class="primary" id="newModelBtn">+ New model</button></div>
+      <div id="modelsGrid" class="models-grid"></div>
+    </section>
+
+    <section id="page-analytics" class="page">
+      <div class="section-head"><div><span class="eyebrow">PERFORMANCE LAB</span><h2>Analytics</h2><p class="muted">Find which conditions produce your best execution.</p></div></div>
+      <div class="stats-grid analytics-stats" id="analyticsStats"></div>
+      <div class="two-col"><div class="panel"><div class="panel-head"><h3>Performance by setup</h3></div><div id="setupPerf"></div></div><div class="panel"><div class="panel-head"><h3>Performance by liquidity</h3></div><div id="liqPerf"></div></div></div>
+      <div class="two-col"><div class="panel"><div class="panel-head"><h3>Common execution mistakes</h3></div><div id="mistakes"></div></div><div class="panel"><div class="panel-head"><h3>Checklist compliance</h3></div><div id="compliance"></div></div></div>
+    </section>
+
+    <section id="page-playbook" class="page">
+      <div class="section-head"><div><span class="eyebrow">YOUR FRAMEWORK</span><h2>Playbook</h2><p class="muted">Keep your current execution framework visible while you trade.</p></div><button class="primary" id="savePlaybook">Save playbook</button></div>
+      <div class="panel playbook"><label>Core model<textarea id="pbCore" placeholder="Example: Liquidity sweep → displacement → MSS → retracement → execution → next meaningful liquidity."></textarea></label><div class="two-col"><label>Reversal rules<textarea id="pbRev"></textarea></label><label>Continuation rules<textarea id="pbCont"></textarea></label></div><div class="two-col"><label>Entry filters<textarea id="pbEntry"></textarea></label><label>Invalidation & targets<textarea id="pbRisk"></textarea></label></div></div>
+    </section>
+
+    <section id="page-settings" class="page">
+      <div class="section-head"><div><span class="eyebrow">CONTROL CENTER</span><h2>Settings</h2></div></div>
+      <div class="two-col">
+        <div class="panel"><h3>Profile</h3><label>Display name<input id="displayName"></label><label>Default market<input id="defaultMarket" placeholder="Forex / Crypto"></label><button class="primary" id="saveProfile">Save profile</button></div>
+        <div class="panel"><h3>Cloud connection</h3><p class="muted">Enter your Supabase project credentials. Only the public client key belongs here.</p><label>Supabase URL<input id="sbUrl" placeholder="https://xxxxx.supabase.co"></label><label>Publishable / anon key<input id="sbKey" placeholder="eyJ..."></label><button class="primary" id="connectSb">Connect cloud</button><p class="tiny">Never enter a service-role/secret key.</p></div>
+      </div>
+      <div class="two-col">
+        <div class="panel"><h3>Data</h3><button class="ghost full" id="exportBtn">Export journal JSON</button><label class="ghost file-btn">Import journal JSON<input id="importFile" type="file" accept=".json"></label></div>
+        <div class="panel danger-panel"><h3>Danger zone</h3><p class="muted">Clear the local journal. Cloud data is untouched unless you explicitly delete it from Supabase.</p><button class="danger full" id="clearBtn">Clear local journal</button></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="tradeModal" class="modal hidden"><div class="modal-card wide"><div class="modal-head"><div><span class="eyebrow">EXECUTION RECORD</span><h2 id="tradeModalTitle">Log trade</h2></div><button class="icon-btn close-modal">×</button></div>
+<form id="tradeForm" class="form-grid">
+<input type="hidden" id="tradeId">
+<label>Date/time<input id="tDate" type="datetime-local" required></label>
+<label>Pair / symbol<input id="tPair" placeholder="EURUSD" required></label>
+<label>Direction<select id="tDirection"><option>Long</option><option>Short</option></select></label>
+<label>Setup<select id="tSetup"><option>Reversal</option><option>Continuation</option></select></label>
+<label>Session<select id="tSession"><option>London</option><option>New York</option><option>Asia</option><option>Overlap</option><option>Other</option></select></label>
+<label>Liquidity<select id="tLiquidity"><option>PDH</option><option>PDL</option><option>BSL</option><option>SSL</option><option>Swing high</option><option>Swing low</option><option>Trend liquidity</option><option>Other</option></select></label>
+<label>Sweep event<select id="tSweep"><option>Wick sweep</option><option>Close beyond level</option><option>Wick + close reclaim</option><option>Multiple liquidity</option></select></label>
+<label>Execution zone<select id="tZone"><option>Discount</option><option>Premium</option><option>Equilibrium</option><option>Not applicable</option></select></label>
+<label>Entry model<select id="tEntry"><option>Order Block</option><option>FVG</option><option>OB + FVG</option><option>Other</option></select></label>
+<label>Confirmation<select id="tConfirm"><option>Displacement + MSS</option><option>SMT + MSS</option><option>IDM/Sweep + MSS</option><option>Displacement only</option><option>Other</option></select></label>
+<label>Risk (R)<input id="tRisk" type="number" step="0.01" value="1"></label>
+<label>Result<select id="tResult"><option>Win</option><option>Loss</option><option>BE</option></select></label>
+<label>R multiple<input id="tR" type="number" step="0.01" value="0"></label>
+<label>Model version<input id="tModel" placeholder="e.g. London Liquidity v1.2"></label>
+<label class="span2">What did I see?<textarea id="tSeen"></textarea></label>
+<label>Execution review<textarea id="tReview"></textarea></label>
+<label>Mistake / lesson<textarea id="tMistake"></textarea></label>
+<label class="span2">Screenshot URL (optional)<input id="tImage" placeholder="https://..."></label>
+<div class="check-grid span2"><label class="check"><input id="cLiquidity" type="checkbox"> Liquidity identified</label><label class="check"><input id="cDisplacement" type="checkbox"> Reasonable displacement</label><label class="check"><input id="cMss" type="checkbox"> MSS confirmed</label><label class="check"><input id="cZone" type="checkbox"> Correct premium/discount zone</label><label class="check"><input id="cExecution" type="checkbox"> Execution model confirmed</label><label class="check"><input id="cRisk" type="checkbox"> Risk respected</label></div>
+<div class="modal-actions span2"><button type="button" class="ghost close-modal">Cancel</button><button class="primary" type="submit">Save trade</button></div>
+</form></div></div>
+
+<div id="modelModal" class="modal hidden"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">MODEL BUILDER</span><h2>Trading model</h2></div><button class="icon-btn close-model">×</button></div><form id="modelForm" class="form-grid"><input type="hidden" id="mId"><label>Name<input id="mName" required></label><label>Type<select id="mType"><option>Reversal</option><option>Continuation</option><option>Both</option></select></label><label>Version<input id="mVersion" value="1.0"></label><label>Market<input id="mMarket" value="Forex"></label><label class="span2">Liquidity rules<textarea id="mLiquidity"></textarea></label><label class="span2">Confirmation rules<textarea id="mConfirmation"></textarea></label><label class="span2">Execution rules<textarea id="mExecution"></textarea></label><label class="span2">Risk, invalidation & targets<textarea id="mRisk"></textarea></label><div class="modal-actions span2"><button type="button" class="ghost close-model">Cancel</button><button class="primary">Save model</button></div></form></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body>
+</html>

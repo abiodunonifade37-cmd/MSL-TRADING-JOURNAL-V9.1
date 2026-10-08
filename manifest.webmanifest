@@ -1,0 +1,10 @@
+{
+  "name":"MSL Trading Journal",
+  "short_name":"MSL Journal",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#06101c",
+  "theme_color":"#07111f",
+  "description":"Professional cloud trading journal and execution analytics.",
+  "icons":[{"src":"assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
